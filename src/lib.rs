@@ -16,7 +16,7 @@ pub fn move_towards(
 ) -> Option<f32> {
     let distance = transform.translation.distance(target);
 
-    if distance.ceil() <= target_min_distance {
+    if distance <= target_min_distance {
         return None;
     }
 
