@@ -1,5 +1,3 @@
-use std::cmp::min_by;
-
 use bevy::{
     prelude::{Res, Transform, Vec3},
     time::Time,
@@ -18,17 +16,13 @@ pub fn move_towards(
 ) -> Option<f32> {
     let distance = transform.translation.distance(target);
 
-    if distance <= target_min_distance {
+    if distance < target_min_distance {
         return None;
     }
 
-    if distance <= target_min_distance + step {
-        transform.translation = transform.translation.lerp(target, time.delta_seconds());
-    } else {
-        transform.translation = transform
-            .translation
-            .lerp(target, step / distance * time.delta_seconds());
-    }
+    transform.translation = transform
+        .translation
+        .lerp(target, step / distance * time.delta_seconds());
 
-    Some(distance - step)
+    Some(distance)
 }
