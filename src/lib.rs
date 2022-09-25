@@ -24,5 +24,5 @@ pub fn move_towards(
         .translation
         .lerp(target, (step / distance) * time.delta_seconds());
 
-    Some(transform.translation.distance(target))
+    Some(distance - step)
 }
