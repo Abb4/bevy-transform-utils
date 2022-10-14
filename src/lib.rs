@@ -1,5 +1,5 @@
 use bevy::{
-    prelude::{Res, Transform, Vec3},
+    prelude::{Res, Transform, Vec3, Vec2},
     time::Time,
 };
 
@@ -25,4 +25,18 @@ pub fn move_towards(
         .lerp(target, step / distance * time.delta_seconds());
 
     Some(distance)
+}
+
+// Given a `Transform` return the angle to rotate the ransform towards the `target`. See `transform.rotate_z`.
+pub fn get_angle_from_transform(transform: &Transform, target: &Vec2) -> f32 {
+    let vector_angle = f32::atan2(
+        transform.translation.y - target.y,
+        transform.translation.x - target.x,
+    );
+
+    let (transform_axis, mut transform_angle) = transform.rotation.to_axis_angle();
+
+    transform_angle *= transform_axis.z;
+
+    vector_angle - transform_angle
 }
