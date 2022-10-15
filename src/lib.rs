@@ -40,3 +40,15 @@ pub fn get_angle_from_transform(transform: &Transform, target: &Vec2) -> f32 {
 
     vector_angle - transform_angle
 }
+
+// Move `transform` by `distance` forwards, as described by `transform.rotation`.
+// Adjusted by `time`.
+pub fn move_forward_by_transform_rotation(mut transform: Transform, distance: f32, time: Time) {
+    let (transform_axis, mut transform_angle) = transform.rotation.to_axis_angle();
+
+    transform_angle *= transform_axis.z;
+
+    // FIXME projectile speed better inside the component
+    transform.translation.x -= transform_angle.cos() * distance * time.delta_seconds();
+    transform.translation.y -= transform_angle.sin() * distance * time.delta_seconds();
+}
