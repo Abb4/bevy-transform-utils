@@ -18,30 +18,16 @@ pub fn move_towards(
     step: f32,
     time: &Res<Time>,
     target_min_distance: f32,
-) {
-    transform.translation = move_towards_glam(
-        transform.translation,
-        target,
-        step,
-        time.delta_seconds(),
-        target_min_distance,
-    );
-}
-
-pub fn move_towards_glam(
-    translation: Vec3,
-    target: Vec3,
-    step: f32,
-    time_delta_sec: f32,
-    target_min_distance: f32,
-) -> Vec3 {
-    let distance = translation.distance(target);
+) -> Option<f32> {
+    let distance = transform.translation.distance(target);
 
     if distance < target_min_distance {
-        return translation;
+        return None;
     }
+   
+    transform.translation = transform.translation.lerp(target, step / distance * time.delta_seconds());
 
-    translation.lerp(target, step / distance * time_delta_sec)
+    return Some(distance)
 }
 
 #[cfg(not(nobevytypes))]
